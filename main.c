@@ -1,17 +1,40 @@
 #include <stdio.h>
+#include <limits.h> // Include limits.h for INT_MIN
 
-
-int maxMinArray(int arr[], int arraySize); // Function prototype
+void findThreeLargest(int arr[], int size, int result[]);
 
 int main() {
-    int arr[] = {3, 5, 8, 6, 2, 7, 10, 11};
+    int arr[] = {3, 4, 5, 8, 9, 1, 2, 7, 10, 0};
     int arraySize = sizeof(arr) / sizeof(arr[0]);
-    int min, max;
+    int result[3];
 
-    maxMinArray(arr, arraySize);
+    findThreeLargest(arr, arraySize, result);
+
+    printf("The three largest numbers are: %d, %d, %d\n", result[0], result[1], result[2]);
 
     return 0;
 }
+
+void findThreeLargest(int arr[], int size, int result[]) {
+    for (int i = 0; i < 3; i++) {
+        result[i] = INT_MIN;
+    }
+
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (arr[i] > result[j]) {
+                for (int k = 2; k > j; k--) {
+                    result[k] = result[k - 1];
+                }
+                result[j] = arr[i];
+                break;
+            }
+        }
+    }
+}
+
+
+
 
 
 int maxMinArray(int arr[], int arraySize) {
