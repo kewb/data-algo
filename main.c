@@ -5,13 +5,50 @@ void findThreeLargest(int arr[], int size, int result[]);
 void findThreeSmallestEven(int arr[], int size, int result[]);
 void avgSum(int arr[], int size);
 void aboveMainD();
+void numberArray();
 
 int main() {
     int arr[] = {3,5,1,8,9,2,7,10,11,0};
     int arraySize = sizeof(arr) / sizeof(arr[0]);
-    aboveMainD();
-
+    numberArray();
     return 0;
+}
+
+
+
+
+void numberArray() {
+    int arr[] = {3, 5, 1, 8, 3, 2, 7, 3, 11, 0};
+    int arraySize = sizeof(arr) / sizeof(arr[0]);
+    int num;
+
+    printf("Enter the integer: ");
+    scanf("%d", &num);
+    printf("Entered integer is: %d\n", num);
+
+    int positions[arraySize]; // An array to store positions
+    int positionCount = 0; // A counter for positions found
+
+    for (int i = 0; i < arraySize; ++i) {
+        if (arr[i] == num) {
+            positions[positionCount] = i;
+            positionCount++;
+            printf("Lol %d", positionCount);
+        }
+    }
+
+    if (positionCount > 0) {
+        printf("The integer %d was found at positions: ", num);
+        for (int i = 0; i < positionCount; ++i) {
+            printf("%d", positions[i]);
+            if (i < positionCount - 1) {
+                printf(", ");
+            }
+        }
+        printf("\n");
+    } else {
+        printf("The integer %d was not found in the array.\n", num);
+    }
 }
 
 
