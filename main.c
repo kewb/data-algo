@@ -4,17 +4,30 @@
 void findThreeLargest(int arr[], int size, int result[]);
 void findThreeSmallestEven(int arr[], int size, int result[]);
 void avgSum(int arr[], int size);
+void aboveMainD();
 
 int main() {
     int arr[] = {3,5,1,8,9,2,7,10,11,0};
     int arraySize = sizeof(arr) / sizeof(arr[0]);
-    int result[3];
-    findThreeSmallestEven(arr,arraySize,result);
-    printf("Smallest: %d, %d, %d\n", result[0], result[1], result[2]);
+    aboveMainD();
 
     return 0;
 }
 
+
+void aboveMainD() {
+    int m1[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    int rows = 3;
+    int columns = 3;
+
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < columns; ++j) {
+            if(i<j) {
+                printf("%d ", m1[i][j]);
+            }
+        }
+    }
+}
 
 
 void findThreeSmallestEven(int arr[], int size, int result[]) {
