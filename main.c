@@ -7,7 +7,7 @@ void avgSum(int arr[], int size);
 void aboveMainD();
 void numberArray();
 
-int main() {
+int main1() {
     int arr[] = {3,5,1,8,9,2,7,10,11,0};
     int arraySize = sizeof(arr) / sizeof(arr[0]);
     numberArray();
