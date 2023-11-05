@@ -28,6 +28,7 @@ int main() {
     char line[MAX_LINE_LENGTH];
     struct BankInfo currentBank = {"", 0};
     struct ClientInfo currentClient = {"", "", "", 0};
+    char currentMonth[3];
 
     while (fgets(line, sizeof(line), inputFile)) {
         char *bankCode = strtok(line, ";");
@@ -37,44 +38,47 @@ int main() {
 
         long long operationAmount = atoll(operationAmountStr);
 
+        // Extract the month from the operation date
+        strncpy(currentMonth, operationDate + 3, 2);
+        currentMonth[2] = '\0';
+
         // Calculate commission (if applicable)
         long long commission = (operationAmount > 5000) ? (operationAmount - 5000) / 200 : 0;
 
         if (strcmp(bankCode, currentBank.bankCode) != 0) {
             // New bank encountered, write out the previous bank info
             if (currentBank.totalCommission > 0) {
-                fprintf(outputFile, "%s|%s|%s;%lld,%03lld\n", currentBank.bankCode, currentClient.clientCode, currentClient.operationDate, currentBank.totalCommission / 1000, currentBank.totalCommission % 1000);
+                fprintf(outputFile, "%s|%s|%s;%lld,%03lld\n", currentBank.bankCode, currentClient.clientCode, currentMonth, currentBank.totalCommission / 1000, currentBank.totalCommission % 1000);
             }
-
-            // Display the total commission for the previous bank
-            printf("BANCA %s: total venit din comisioane - %lld\n", currentBank.bankCode, currentBank.totalCommission);
 
             // Update the current bank code
             strcpy(currentBank.bankCode, bankCode);
             currentBank.totalCommission = 0;
-        } else if (strcmp(clientCode, currentClient.clientCode) != 0 || strcmp(operationDate, currentClient.operationDate) != 0) {
+        } else if (strcmp(clientCode, currentClient.clientCode) != 0 || strcmp(currentMonth, operationDate + 3) != 0) {
             // New client or new month encountered, write out the previous commission
             if (currentBank.totalCommission > 0) {
-                fprintf(outputFile, "%s|%s|%s;%lld,%03lld\n", currentBank.bankCode, currentClient.clientCode, currentClient.operationDate, currentBank.totalCommission / 1000, currentBank.totalCommission % 1000);
+                fprintf(outputFile, "%s|%s|%s;%lld,%03lld\n", currentBank.bankCode, currentClient.clientCode, currentMonth, currentBank.totalCommission / 1000, currentBank.totalCommission % 1000);
             }
 
-            // Update the current client and operation date
+            // Update the current client and month
             strcpy(currentClient.clientCode, clientCode);
-            strcpy(currentClient.operationDate, operationDate);
+            strcpy(currentMonth, operationDate + 3);
         }
 
         // Accumulate the commission for the current bank
         currentBank.totalCommission += commission;
     }
 
-    // Write out the last bank info and display the total commission
+    // Write out the last bank info
     if (currentBank.totalCommission > 0) {
-        fprintf(outputFile, "%s|%s|%s;%lld,%03lld\n", currentBank.bankCode, currentClient.clientCode, currentClient.operationDate, currentBank.totalCommission / 1000, currentBank.totalCommission % 1000);
-        printf("BANCA %s: total venit din comisioane - %lld\n", currentBank.bankCode, currentBank.totalCommission);
+        fprintf(outputFile, "%s|%s|%s;%lld,%03lld\n", currentBank.bankCode, currentClient.clientCode, currentMonth, currentBank.totalCommission / 1000, currentBank.totalCommission % 1000);
     }
 
     fclose(inputFile);
     fclose(outputFile);
+
+    // Display the total commission for each bank
+    printf("BANCA %s: total venit din comisioane - %lld\n", currentBank.bankCode, currentBank.totalCommission);
 
     return 0;
 }
